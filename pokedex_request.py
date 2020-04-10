@@ -198,6 +198,33 @@ class Pokemon:
 
 
 
+class Move:
+
+    def __init__(self, name: str, move_id: int, generation: str, accuracy: int,
+                 pp: int, power: int, move_type: str, dmg_class: str,
+                 effect_short: str):
+        self.name = name
+        self.id = move_id
+        self.generation = generation
+        self.accuracy = accuracy
+        self.effect_short = effect_short
+        self.pp = pp
+        self.power = power
+        self.move_type = move_type
+        self.dmg_class = dmg_class
+
+    def __str__(self):
+        return f"Move: : {self.name.title()}\n" \
+               f"ID: {self.id}\n" \
+               f"Generation: {self.generation}\n" \
+               f"Accuracy: {self.accuracy}\n" \
+               f"PP: {self.pp}\n" \
+               f"Power: {self.power}\n" \
+               f"Type: {self.move_type}\n" \
+               f"Damage class: {self.dmg_class}\n" \
+               f"Effect: {self.effect_short}\n"
+
+
 def main():
     pokedex = PokedexAPI()
     loop = asyncio.new_event_loop()
@@ -214,6 +241,18 @@ def main():
 
     for pokemon in pokemon_list:
         print(pokemon)
+
+    requests = ["surf", "cut", "ice-punch"]
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    moves = loop.run_until_complete(pokedex.process_requests("move", requests))
+    move_list = [Move(move['name'], move['id'], move['generation']['name'],
+                      move['accuracy'], move['pp'], move['power'],
+                      move['type']['name'], move['damage_class']['name'],
+                      move['effect_entries'][0]['short_effect'])
+                 for move in moves]
+    for move in move_list:
+        print(move)
 
 
 if __name__ == "__main__":
