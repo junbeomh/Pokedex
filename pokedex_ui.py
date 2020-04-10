@@ -1,9 +1,14 @@
 """
-This module depicts the use of making a program request through
-arguments from the command-line interface.
 """
 
 import argparse
+from enum import Enum
+
+
+class PokedexMode(Enum):
+    POKEMON = "pokemon"
+    ABILITY = "ability"
+    MOVE = "move"
 
 
 class Request:
