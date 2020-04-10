@@ -79,8 +79,8 @@ class PokemonAbility(PokedexObject):
         return f"Ability: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
-               f"Effect: {self.format_list(self.effect)}\n" \
                f"Short Effect: {self.effect_short}\n" \
+               f"Effect: {self.format_list(self.effect)}\n" \
                f"Pokemon: {self.pokemon}\n"
 
 
