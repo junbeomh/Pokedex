@@ -1,11 +1,21 @@
-class Pokemon:
+from abc import ABC
+
+
+class PokedexObject(ABC):
+    def __init__(self, name: str, id: int, **kwargs):
+        self.name = name
+        self.id = id
+        super().__init__(**kwargs)
+
+
+class Pokemon(PokedexObject):
     """
     A class for a pokemon entity.
     """
 
     def __init__(self, pokemon_id: str, name: str, height: str, weight: str,
                  pokemon_type: list, stats: list, abilities: list,
-                 moves: list):
+                 moves: list, **kwargs):
         """
         Initializes a Pokemon object.
 
@@ -22,14 +32,13 @@ class Pokemon:
         :param moves: a list of tuples that contain information about
                       the pokemon's attack moves.
         """
-        self.id = pokemon_id
-        self.name = name
         self.height = height
         self.weight = weight
         self.type = self.parse_types(pokemon_type)
         self.stats = self.parse_default_stats(stats)
         self.abilities = self.parse_default_abilities(abilities)
         self.moves = self.parse_default_moves(moves)
+        super().__init__(name, pokemon_id, **kwargs)
 
     @staticmethod
     def parse_types(types: list):
@@ -117,4 +126,66 @@ class Pokemon:
                f"Type: {', '.join(self.type)}\n" \
                f"Stats: {self.stats}\n" \
                f"Abilities: {', '.join(self.abilities)}\n" \
-               f"Moves: {self.moves}\n" \
+               f"Moves: {self.moves}\n"
+
+
+class Ability(PokedexObject):
+    def __init__(self, name: str, id: int, generation: str, effect: str,
+                 effect_short: str, pokemons: list, **kwargs):
+        self.generation = generation
+        self.effect = effect
+        self.effect_short = effect_short
+        self.pokemon = self.parse_pokemon(pokemons)
+        super().__init__(name, id, **kwargs)
+
+    @staticmethod
+    def parse_pokemon(pokemons: list):
+        pokemon_list = []
+        for pokemon in pokemons:
+            pokemon_list.append(pokemon["pokemon"]["name"])
+        return pokemon_list
+
+    def __str__(self):
+        return f"Ability: {self.name.title()}\n" \
+               f"ID: {self.id}\n" \
+               f"Generation: {self.generation}\n" \
+               f"Effect: {self.effect}\n" \
+               f"Short Effect: {self.effect_short}\n" \
+               f"Pokemon: {self.pokemon}\n"
+
+
+class Stat(PokedexObject):
+    def __init__(self, name: str, id: int, is_battle_only: bool, **kwargs):
+        self.is_battle_only = is_battle_only
+        super().__init__(name, id, **kwargs)
+
+    def __str__(self):
+        return f"Stat: {self.name.title()}\n" \
+               f"ID: {self.id}\n" \
+               f"Is Battle Only: {self.is_battle_only}\n"
+
+
+class Move(PokedexObject):
+
+    def __init__(self, name: str, move_id: int, generation: str, accuracy: int,
+                 pp: int, power: int, move_type: str, dmg_class: str,
+                 effect_short: str, **kwargs):
+        self.generation = generation
+        self.accuracy = accuracy
+        self.effect_short = effect_short
+        self.pp = pp
+        self.power = power
+        self.move_type = move_type
+        self.dmg_class = dmg_class
+        super().__init__(name, move_id, **kwargs)
+
+    def __str__(self):
+        return f"Move: : {self.name.title()}\n" \
+               f"ID: {self.id}\n" \
+               f"Generation: {self.generation}\n" \
+               f"Accuracy: {self.accuracy}\n" \
+               f"PP: {self.pp}\n" \
+               f"Power: {self.power}\n" \
+               f"Type: {self.move_type}\n" \
+               f"Damage class: {self.dmg_class}\n" \
+               f"Effect: {self.effect_short}\n"
