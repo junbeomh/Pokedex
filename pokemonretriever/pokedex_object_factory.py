@@ -65,20 +65,21 @@ class PokemonFactory(PokedexObjectFactory):
             return self.create_mode_normal()
 
     def create_mode_normal(self):
-        pokemon = Pokemon(**self.data_set)
-        return pokemon
+        for data in self.data_set:
+            yield Pokemon(**data)
 
     def create_mode_expanded(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        pokemon = Pokemon(**self.data_set)
-        ability_name = self.data_set["abilities"][0]["ability"]['name']
-        move_name = self.data_set["moves"][0]['move']['name']
-        stat_number = self.data_set["stats"][0]["stat"]["url"][-2]
-        pokemon.stats = self.add_expanded_stats(stat_number)
-        pokemon.moves = self.add_expanded_moves(move_name)
-        pokemon.abilities = self.add_expanded_abilities(ability_name)
-        return pokemon
+        for data in self.data_set:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            pokemon = Pokemon(**self.data_set)
+            ability_name = self.data_set["abilities"][0]["ability"]['name']
+            move_name = self.data_set["moves"][0]['move']['name']
+            stat_number = self.data_set["stats"][0]["stat"]["url"][-2]
+            pokemon.stats = self.add_expanded_stats(stat_number)
+            pokemon.moves = self.add_expanded_moves(move_name)
+            pokemon.abilities = self.add_expanded_abilities(ability_name)
+            yield pokemon
 
     def add_expanded_abilities(self, name):
         loop = asyncio.new_event_loop()

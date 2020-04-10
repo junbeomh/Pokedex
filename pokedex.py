@@ -3,7 +3,10 @@
 
 import argparse
 from enum import Enum
-
+from pokemonretriever.pokedex_object_factory import PokemonFactory, \
+    PokemonMoveFactory, PokemonAbilityFactory
+from pokemonretriever.pokedex_request import PokedexAPI
+import asyncio
 
 class PokedexMode(Enum):
     POKEMON = "pokemon"
@@ -56,7 +59,7 @@ def setup_cmd_line_interface():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("mode", type=str,
-                        choices=['pokemon', 'moves', 'abilities'],
+                        choices=['pokemon', 'move', 'ability'],
                         help="Choose one of the three values to perform"
                              "query.")
     parser.add_argument("--expanded", type=str,
@@ -81,11 +84,39 @@ def setup_cmd_line_interface():
     return parser.parse_args()
 
 
+class ReportGenerator:
+    def __init__(self, request):
+        self.request = request
+        self.factory_mapping = {
+            "pokemon": PokemonFactory,
+            "ability": PokemonAbilityFactory,
+            "move": PokemonMoveFactory
+        }
+        self.pokedexAPI = PokedexAPI()
+        self.container = []
+
+    def has_input_data(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        info = loop.run_until_complete(
+            self.pokedexAPI.process_single_request(self.request.mode,
+                                                   self.request.input_data))
+        factory = self.factory_mapping[self.request.mode]([info],
+                                                          self.request.expanded)
+        for pokemon_object in factory.create():
+            print(pokemon_object)
+            self.container.append(pokemon_object)
+
+    def generate_report(self):
+        return self.has_input_data()
+
+
 def main():
     args = setup_cmd_line_interface()
     request = Request(args.mode, args.expanded, args.inputdata, args.inputfile,
                       args.output)
-    print(request)
+    report = ReportGenerator(request)
+    report.generate_report()
 
 
 if __name__ == "__main__":

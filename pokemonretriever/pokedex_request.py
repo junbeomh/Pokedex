@@ -94,7 +94,7 @@ def main():
     for pokemon in pokemon_list:
         print(pokemon)
 
-    requests = ["surf", "cut", "ice-punch"]
+    requests = ["1", "cut", "ice-punch"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     moves = loop.run_until_complete(pokedex.process_requests("move", requests))
@@ -111,7 +111,7 @@ def main():
     for move in move_list:
         print(move)
 
-    requests = ["battle-armor", "sturdy", "levitate"]
+    requests = ["1", "sturdy", "levitate"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     abilities = loop.run_until_complete(pokedex.process_requests("ability",
@@ -133,6 +133,8 @@ def main():
                  for stat in stats]
     for stat in stat_list:
         print(stat)
+
+
 
 
 if __name__ == "__main__":
