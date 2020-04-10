@@ -62,11 +62,8 @@ class PokemonFactory(PokedexObjectFactory):
         if self.is_expanded:
             return self.create_mode_expanded()
         else:
-            return self.create_mode_normal()
-
-    def create_mode_normal(self):
-        pokemon = Pokemon(**self.data_set)
-        return pokemon
+            pokemon = Pokemon(**self.data_set)
+            return pokemon
 
     def create_mode_expanded(self):
         loop = asyncio.new_event_loop()

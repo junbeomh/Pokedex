@@ -12,25 +12,25 @@ class Pokemon(PokedexObject):
     """
     """
 
-    def __init__(self, name: str, id: int, height: int, weight: int,
+    def __init__(self, height: int, weight: int,
                  types: [str], stats: list, abilities: [list],
                  moves: list, **kwargs):
         """
         """
-        super().__init__(name, id, **kwargs)
+        super().__init__(**kwargs)
         self.height = height
         self.weight = weight
-        self.type = self.parse_pokemon_type(types)
-        self.stats = self.parse_stats(stats)
+        self.type = self.format_pokemon_type(types)
+        self.stats = self.format_stats(stats)
         self.stats = stats
-        self.abilities = self.parse_abilities(abilities)
+        self.abilities = self.format_abilities(abilities)
         self.abilities = abilities
 
-        self.moves = self.parse_moves(moves)
+        self.moves = self.format_moves(moves)
         self.moves = moves
 
     @staticmethod
-    def parse_pokemon_type(types: list):
+    def format_pokemon_type(types: list):
         """
         Parses the Pokemon's raw type data into a processable
         default format.
@@ -46,7 +46,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def parse_stats(stats: list):
+    def format_stats(stats: list):
         """
         Parses the Pokemon's raw stats data into a processable
         default format.
@@ -69,7 +69,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def parse_abilities(abilities: list):
+    def format_abilities(abilities: list):
         """
         Parses the Pokemon's raw ability data into a processable
         default format.
@@ -85,7 +85,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def parse_moves(moves: list):
+    def format_moves(moves: list):
         """
         Parses the Pokemon's raw attacking move data into a
         processable default format.
@@ -120,19 +120,19 @@ class Pokemon(PokedexObject):
 
 class PokemonAbility(PokedexObject):
 
-    def __init__(self, name: str, id: int, generation: str,
-                 effect: str, effect_short: str, pokemon: list, **kwargs):
-        super().__init__(name, id, **kwargs)
+    def __init__(self, generation: str, effect: str, effect_short: str,
+                 pokemon: list, **kwargs):
+        super().__init__(**kwargs)
         self.generation = generation
 
         # removes double space btwn lines
         self.effect = effect.replace('\n\n', '')
 
         self.effect_short = effect_short
-        self.pokemon = self.parse_pokemon(pokemon)
+        self.pokemon = self.format_pokemon(pokemon)
 
     @staticmethod
-    def parse_pokemon(pokemons: list):
+    def format_pokemon(pokemons: list):
         output = []
         for pokemon in pokemons:
             output.append(pokemon["pokemon"]["name"])
@@ -159,9 +159,8 @@ class PokemonAbility(PokedexObject):
 
 class PokemonStat(PokedexObject):
 
-    def __init__(self, name: str, id: int, is_battle_only: bool,
-                 **kwargs):
-        super().__init__(name, id, **kwargs)
+    def __init__(self, is_battle_only: bool, **kwargs):
+        super().__init__(**kwargs)
         self.is_battle_only = is_battle_only
 
     def __str__(self):
@@ -172,10 +171,9 @@ class PokemonStat(PokedexObject):
 
 class PokemonMove(PokedexObject):
 
-    def __init__(self, name: str, id: int, generation: str, accuracy: int,
-                 pp: int, power: int, move_type: str, dmg_class: str,
-                 effect_short: str, **kwargs):
-        super().__init__(name, id, **kwargs)
+    def __init__(self, generation: str, accuracy: int, pp: int, power: int,
+                 move_type: str, dmg_class: str, effect_short: str, **kwargs):
+        super().__init__(**kwargs)
         self.generation = generation
         self.accuracy = accuracy
         self.effect_short = effect_short

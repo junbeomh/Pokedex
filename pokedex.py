@@ -11,6 +11,10 @@ class PokedexMode(Enum):
     MOVE = "move"
 
 
+class Pokedex():
+    pass
+
+
 class Request:
     """
     A request object represents a request specifications about
@@ -36,6 +40,9 @@ class Request:
         self.input_data = input_data
         self.input_file = input_file
         self.output_file = output_file
+
+    def process_request_data(self):
+        pass
 
     def __str__(self):
         return f"Request: \n" \
