@@ -14,6 +14,7 @@ import ssl
 from move import Move
 from pokemon import Pokemon
 from ability import Ability
+from stats import Stat
 
 
 class PokedexAPI:
@@ -108,7 +109,7 @@ def main():
     for move in move_list:
         print(move)
 
-    requests = ["battle-armor"]
+    requests = ["battle-armor", "sturdy", "levitate"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     abilities = loop.run_until_complete(pokedex.process_requests("ability",
@@ -120,6 +121,15 @@ def main():
                             ability["pokemon"]) for ability in abilities]
     for ability in ability_list:
         print(ability)
+
+    requests = ["speed", "defense", "hp"]
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    stats = loop.run_until_complete(pokedex.process_requests("stat", requests))
+    stat_list = [Stat(stat["name"], stat["id"], stat["is_battle_only"])
+                 for stat in stats]
+    for stat in stat_list:
+        print(stat)
 
 
 if __name__ == "__main__":

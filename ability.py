@@ -16,7 +16,7 @@ class Ability:
         return pokemon_list
 
     def __str__(self):
-        return f"Move: {self.name.title()}\n" \
+        return f"Ability: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
                f"Effect: {self.effect}\n" \
