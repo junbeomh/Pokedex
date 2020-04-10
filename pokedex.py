@@ -52,7 +52,7 @@ class Request:
         self.pokedexAPI = PokedexAPI()
 
     def process_file_to_data(self):
-        with open(file=self.input_file, mode="w", encoding="UTF-8") as file:
+        with open(file=self.input_file, mode="w+", encoding="UTF-8") as file:
             self.input_data = [line.strip("\n") for line in file]
 
     def process_request(self) -> list:
@@ -78,7 +78,7 @@ class Pokedex:
         self.factory = request.factory_map[PokedexMode(self.request.mode)]
         self.container = []
 
-    def has_input_data(self):
+    def get_pokemon_objects(self):
         info = self.request.process_request()
         factory = self.factory(info, self.request.expanded)
         for pokemon_object in factory.create():
@@ -86,7 +86,10 @@ class Pokedex:
             self.container.append(pokemon_object)
 
     def generate_report(self):
-        return self.has_input_data()
+        self.get_pokemon_objects()
+        with open(file="output.txt", mode="w+", encoding="UTF-8") as file:
+            for objects in self.container:
+                file.write(str(objects))
 
 
 def setup_cmd_line_interface():
