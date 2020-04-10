@@ -1,17 +1,13 @@
 """
-This module depicts the use of a making a HTTP GET requests to retrieve
-information about pokemons.
 """
 
-# John (JunBeom) Han
-# A01064824
-# 2020/04/03
 
 import aiohttp
 import asyncio
 import ssl
 
-from pokedex_object import Pokemon, Ability, Stat, Move
+from pokemonretriever.pokedex_object import Pokemon, PokemonAbility, \
+    PokemonStat, PokemonMove
 
 
 class PokedexAPI:
@@ -79,43 +75,53 @@ class PokedexAPI:
 
 def main():
     pokedex = PokedexAPI()
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    requests = ["charmander", "squirtle", "bulbasaur", "pikachu", "151"]
-    pokemons = loop.run_until_complete(pokedex.process_requests("pokemon",
-                                                                requests))
-
-    pokemon_list = [Pokemon(pokemon['id'], pokemon['name'], pokemon['height'],
-                            pokemon['weight'], pokemon['types'],
-                            pokemon['stats'], pokemon['abilities'],
-                            pokemon['moves'])
-                    for pokemon in pokemons]
-
-    for pokemon in pokemon_list:
-        print(pokemon)
-
-    requests = ["surf", "cut", "ice-punch"]
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    moves = loop.run_until_complete(pokedex.process_requests("move", requests))
-    move_list = [Move(move['name'], move['id'], move['generation']['name'],
-                      move['accuracy'], move['pp'], move['power'],
-                      move['type']['name'], move['damage_class']['name'],
-                      move['effect_entries'][0]['short_effect'])
-                 for move in moves]
-    for move in move_list:
-        print(move)
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # requests = ["charmander", "squirtle", "bulbasaur", "pikachu", "151"]
+    # pokemons = loop.run_until_complete(pokedex.process_requests("pokemon",
+    #                                                             requests))
+    #
+    # pokemon_list = [Pokemon(pokemon['name'],
+    #                         int(pokemon['id']),
+    #                         int(pokemon['height']),
+    #                         int(pokemon['weight']),
+    #                         pokemon['types'],
+    #                         pokemon['stats'],
+    #                         pokemon['abilities'],
+    #                         pokemon['moves'])
+    #                 for pokemon in pokemons]
+    #
+    # for pokemon in pokemon_list:
+    #     print(pokemon)
+    #
+    # requests = ["surf", "cut", "ice-punch"]
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # moves = loop.run_until_complete(pokedex.process_requests("move", requests))
+    # move_list = [PokemonMove(move['name'],
+    #                          int(move['id']),
+    #                          move['generation']['name'],
+    #                          int(move['accuracy']),
+    #                          int(move['pp']),
+    #                          int(move['power']),
+    #                          move['type']['name'],
+    #                          move['damage_class']['name'],
+    #                          move['effect_entries'][0]['short_effect'])
+    #              for move in moves]
+    # for move in move_list:
+    #     print(move)
 
     requests = ["battle-armor", "sturdy", "levitate"]
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     abilities = loop.run_until_complete(pokedex.process_requests("ability",
                                                                  requests))
-    ability_list = [Ability(ability["name"], ability["id"],
-                            ability["generation"]["name"],
-                            ability["effect_entries"][0]["effect"],
-                            ability["effect_entries"][0]["short_effect"],
-                            ability["pokemon"]) for ability in abilities]
+    ability_list = [PokemonAbility(ability["name"], int(ability["id"]),
+                                   ability["generation"]["name"],
+                                   ability["effect_entries"][0]["effect"],
+                                   ability["effect_entries"][0]["short_effect"],
+                                   ability["pokemon"])
+                    for ability in abilities]
     for ability in ability_list:
         print(ability)
 
@@ -123,7 +129,7 @@ def main():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     stats = loop.run_until_complete(pokedex.process_requests("stat", requests))
-    stat_list = [Stat(stat["name"], stat["id"], stat["is_battle_only"])
+    stat_list = [PokemonStat(stat["name"], stat["id"], stat["is_battle_only"])
                  for stat in stats]
     for stat in stat_list:
         print(stat)
