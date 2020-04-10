@@ -3,7 +3,7 @@ class Ability:
                  effect_short: str, pokemons: list):
         self.name = name
         self.id = id
-        self.generation: generation
+        self.generation = generation
         self.effect = effect
         self.effect_short = effect_short
         self.pokemon = self.parse_pokemon(pokemons)

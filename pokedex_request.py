@@ -115,8 +115,8 @@ def main():
                                                                  requests))
     ability_list = [Ability(ability["name"], ability["id"],
                             ability["generation"]["name"],
-                            ability["effect_entries"]["effect"],
-                            ability["effect_entries"]["short_effect"],
+                            ability["effect_entries"][0]["effect"],
+                            ability["effect_entries"][0]["short_effect"],
                             ability["pokemon"]) for ability in abilities]
     for ability in ability_list:
         print(ability)
