@@ -68,7 +68,7 @@ class PokedexMoveParser(PokedexDataParser):
         effect_short = move['effect_entries'][0]['short_effect']
         return {'name': name, 'id': id, 'generation': generation,
                 "accuracy": accuracy, "pp": pp, "power": power,
-                "move_type": move_type, "dmg_class": dmg_class,
+                "type": move_type, "damage_class": dmg_class,
                 'effect_short': effect_short}
 
     # def parse_ability(self, name):

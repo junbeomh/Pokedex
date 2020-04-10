@@ -13,7 +13,7 @@ from pokemonretriever.pokedex_parser import PokedexMoveParser, \
 
 class PokedexObjectFactory(ABC):
 
-    def __init__(self, data_set: dict, is_expanded: bool = False):
+    def __init__(self, data_set: list, is_expanded: bool = False):
         self.data_set = data_set
         self.is_expanded = is_expanded
 
@@ -24,7 +24,7 @@ class PokedexObjectFactory(ABC):
 
 class PokemonStatFactory(PokedexObjectFactory):
 
-    def __init__(self, data: dict, is_expanded: bool):
+    def __init__(self, data: list, is_expanded: bool):
         super().__init__(data, is_expanded)
 
     def create(self):
@@ -34,7 +34,7 @@ class PokemonStatFactory(PokedexObjectFactory):
 
 class PokemonMoveFactory(PokedexObjectFactory):
 
-    def __init__(self, data: dict, is_expanded: bool):
+    def __init__(self, data: list, is_expanded: bool):
         super().__init__(data, is_expanded)
 
     def create(self):
@@ -44,7 +44,7 @@ class PokemonMoveFactory(PokedexObjectFactory):
 
 class PokemonAbilityFactory(PokedexObjectFactory):
 
-    def __init__(self, data: dict, is_expanded: bool):
+    def __init__(self, data: list, is_expanded: bool):
         super().__init__(data, is_expanded)
 
     def create(self):
@@ -54,7 +54,7 @@ class PokemonAbilityFactory(PokedexObjectFactory):
 
 class PokemonFactory(PokedexObjectFactory):
 
-    def __init__(self, data: dict, is_expanded: bool):
+    def __init__(self, data: list, is_expanded: bool):
         super().__init__(data, is_expanded)
         self.api = PokedexAPI()
 
@@ -62,20 +62,24 @@ class PokemonFactory(PokedexObjectFactory):
         if self.is_expanded:
             return self.create_mode_expanded()
         else:
-            pokemon = Pokemon(**self.data_set)
-            return pokemon
+            return self.create_mode_normal()
+
+    def create_mode_normal(self):
+        for data in self.data_set:
+            yield Pokemon(**data)
 
     def create_mode_expanded(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        pokemon = Pokemon(**self.data_set)
-        ability_name = self.data_set["abilities"][0]["ability"]['name']
-        move_name = self.data_set["moves"][0]['move']['name']
-        stat_number = self.data_set["stats"][0]["stat"]["url"][-2]
-        pokemon.stats = self.add_expanded_stats(stat_number)
-        pokemon.moves = self.add_expanded_moves(move_name)
-        pokemon.abilities = self.add_expanded_abilities(ability_name)
-        return pokemon
+        for data in self.data_set:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            pokemon = Pokemon(**data)
+            ability_name = self.data_set["abilities"][0]["ability"]['name']
+            move_name = self.data_set["moves"][0]['move']['name']
+            stat_number = self.data_set["stats"][0]["stat"]["url"][-2]
+            pokemon.stats = self.add_expanded_stats(stat_number)
+            pokemon.moves = self.add_expanded_moves(move_name)
+            pokemon.abilities = self.add_expanded_abilities(ability_name)
+            yield pokemon
 
     def add_expanded_abilities(self, name):
         loop = asyncio.new_event_loop()
@@ -110,10 +114,7 @@ def main():
         "pokemon", "151"))
     factory = PokemonFactory(pokemons, True)
     pokemon = factory.create()
-    print(pokemon.stats)
-    print(pokemon.moves)
-    print(pokemon.abilities)
-
+    print(pokemon.name)
 
 
 if __name__ == "__main__":
