@@ -11,10 +11,7 @@ import aiohttp
 import asyncio
 import ssl
 
-from move import Move
-from pokemon import Pokemon
-from ability import Ability
-from stats import Stat
+from pokedex_object import Pokemon, Ability, Stat, Move
 
 
 class PokedexAPI:
