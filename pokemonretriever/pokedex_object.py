@@ -120,16 +120,17 @@ class Pokemon(PokedexObject):
 
 class PokemonAbility(PokedexObject):
 
-    def __init__(self, name: str, id: int, generation: str
-                 , effect_entries: str, pokemon: list, **kwargs):
+    def __init__(self, name: str, id: int, generation: str,
+                 effect: str, effect_short: str, pokemon: list, **kwargs):
         super().__init__(name, id, **kwargs)
-        self.generation = generation["name"]
+        self.generation = generation
 
         # removes double space btwn lines
-        self.effect = effect_entries[0]['effect'].replace("\n\n", "")
+        self.effect = effect.replace('\n\n', '')
 
-        self.short_effect = effect_entries[0]['short_effect']
+        self.effect_short = effect_short
         self.pokemon = self.format_pokemon(pokemon)
+
 
     @staticmethod
     def format_pokemon(pokemons: list):
@@ -152,7 +153,7 @@ class PokemonAbility(PokedexObject):
         return f"Ability: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
-               f"Short Effect: {self.short_effect}\n" \
+               f"Short Effect: {self.effect_short}\n" \
                f"Effect: {self.format_list(self.effect)}\n" \
                f"Pokemon: {self.pokemon}\n"
 
@@ -171,18 +172,17 @@ class PokemonStat(PokedexObject):
 
 class PokemonMove(PokedexObject):
 
-
     def __init__(self, name: str, id: int, generation: str, accuracy: int,
-                 pp: int, power: int, type: str, damage_class: str,
-                 effect_entries: str, **kwargs):
+                 pp: int, power: int, move_type: str, dmg_class: str,
+                 effect_short: str, **kwargs):
         super().__init__(name, id, **kwargs)
-        self.generation = generation["name"]
+        self.generation = generation
         self.accuracy = accuracy
-        self.short_effect = effect_entries[0]['short_effect']
+        self.effect_short = effect_short
         self.pp = pp
         self.power = power
-        self.move_type = type["name"]
-        self.dmg_class = damage_class["name"]
+        self.move_type = move_type
+        self.dmg_class = dmg_class
 
     def __str__(self):
         return f"Move: : {self.name.title()}\n" \
@@ -193,4 +193,4 @@ class PokemonMove(PokedexObject):
                f"Power: {self.power}\n" \
                f"Type: {self.move_type}\n" \
                f"Damage class: {self.dmg_class}\n" \
-               f"Effect: {self.short_effect}\n"
+               f"Effect: {self.effect_short}\n"

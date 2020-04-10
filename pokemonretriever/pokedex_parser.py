@@ -15,6 +15,25 @@ class PokedexDataParser(ABC):
     def parse(json, value):
         pass
 
+class PokedexPokemonParser(PokedexDataParser):
+    def __init__(self):
+        super().__init__()
+
+    @staticmethod
+    def parse(json):
+        pokemon = json
+        name = pokemon["name"]
+        id = int(pokemon["id"])
+        height = int(pokemon["height"])
+        weight = int(pokemon["weight"])
+        types = pokemon["types"]
+        stats = pokemon["stats"]
+        abilities = pokemon["abilities"]
+        moves = pokemon["moves"]
+        return {'name': name, 'id': id, 'height': height, 'weight': weight,
+                'types': types, 'stats': stats, 'abilities': abilities,
+                'moves': moves}
+
 
 class PokedexAbilityParser(PokedexDataParser):
 
@@ -22,9 +41,9 @@ class PokedexAbilityParser(PokedexDataParser):
         super().__init__()
 
     @staticmethod
-    def parse(json, name):
+    def parse(json):
         ability = json
-        name = name
+        name = ability["name"]
         id = int(ability["id"])
         generation = ability["generation"]["name"]
         effect = ability["effect_entries"][0]["effect"]
@@ -55,9 +74,9 @@ class PokedexMoveParser(PokedexDataParser):
         super().__init__()
 
     @staticmethod
-    def parse(json, name):
+    def parse(json):
         move = json
-        name = name
+        name = move["name"]
         id = int(move['id']),
         generation = move['generation']['name'],
         accuracy = int(move['accuracy']),
