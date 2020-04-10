@@ -64,6 +64,8 @@ class PokedexAPI:
                          names.
         :return: a dict, json representation of GET http response.
         """
+        if len(requests) == 1:
+            return await self.process_single_request(req_type, requests[0])
         async with self.session() as session:
             list_urls = [self.url.format(req_type, req_id) for
                          req_id in requests]

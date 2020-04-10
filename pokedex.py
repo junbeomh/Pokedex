@@ -44,9 +44,23 @@ class Request:
         """
         self.mode = mode
         self.expanded = expanded
-        self.input_data = input_data
+        self.input_data = [input_data]
         self.input_file = input_file
+        if input_file:
+            self.process_file_to_data()
         self.output_file = output_file
+        self.pokedexAPI = PokedexAPI()
+
+    def process_file_to_data(self):
+        with open(file=self.input_file, mode="w", encoding="UTF-8") as file:
+            self.input_data = [line.strip("\n") for line in file]
+
+    def process_request(self) -> list:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        info = loop.run_until_complete(
+            self.pokedexAPI.process_requests(self.mode, self.input_data))
+        return [info]
 
     def __str__(self):
         return f"Request: \n" \
@@ -62,16 +76,11 @@ class Pokedex:
     def __init__(self, request):
         self.request = request
         self.factory = request.factory_map[PokedexMode(self.request.mode)]
-        self.pokedexAPI = PokedexAPI()
         self.container = []
 
     def has_input_data(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        info = loop.run_until_complete(
-            self.pokedexAPI.process_single_request(self.request.mode,
-                                                   self.request.input_data))
-        factory = self.factory([info], self.request.expanded)
+        info = self.request.process_request()
+        factory = self.factory(info, self.request.expanded)
         for pokemon_object in factory.create():
             print(pokemon_object)
             self.container.append(pokemon_object)
