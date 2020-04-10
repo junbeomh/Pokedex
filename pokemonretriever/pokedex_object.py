@@ -1,69 +1,142 @@
 from abc import ABC
-from pokemonretriever.pokedex_parser import PokedexParser
 
 
 class PokedexObject(ABC):
+
     def __init__(self, name: str, id: int, **kwargs):
-        self.name = name
+        self.name = name.title()
         self.id = id
-        self.parser = PokedexParser()
-        super().__init__(**kwargs)
 
 
 class Pokemon(PokedexObject):
     """
-    A class for a pokemon entity.
     """
 
-    def __init__(self, name: str, pokemon_id: int, height: int, weight: int,
-                 pokemon_type: list, stats: list, abilities: list,
+    def __init__(self, name: str, id: int, height: int, weight: int,
+                 types: [str], stats: list, abilities: [list],
                  moves: list, **kwargs):
         """
-        Initializes a Pokemon object.
-
-        :param pokemon_id: a string.
-        :param name: a string.
-        :param height: a string.
-        :param weight: a string.
-        :param pokemon_type: a list of string that contain information
-                             about the pokemon's type.
-        :param stats: a list of tuples that contain information about
-                      the pokemon's stats.
-        :param abilities: a list of strings that contain information
-                          about the pokemon's ability
-        :param moves: a list of tuples that contain information about
-                      the pokemon's attack moves.
         """
-        super().__init__(name, pokemon_id, **kwargs)
+        super().__init__(name, id, **kwargs)
         self.height = height
         self.weight = weight
-        self.type = self.parser.parse_pokemon_type(pokemon_type)
-        self.stats = self.parser.parse_pokemon_default_stat(stats)
-        self.abilities = self.parser.parse_pokemon_default_abilities(abilities)
-        self.moves = self.parser.parse_pokemon_default_moves(moves)
+        self.type = self.parse_pokemon_type(types)
+        self.stats = self.parse_stats(stats)
+        self.stats = stats
+        self.abilities = self.parse_abilities(abilities)
+        self.abilities = abilities
+
+        self.moves = self.parse_moves(moves)
+        self.moves = moves
+
+    @staticmethod
+    def parse_pokemon_type(types: list):
+        """
+        Parses the Pokemon's raw type data into a processable
+        default format.
+
+        :param types: a list of dict that contains the API data about
+                      the pokemon's type.
+        :return: a list of string that contain information
+                 about the pokemon's type.
+        """
+        output = []
+        for pokemon_type in types:
+            output.append(pokemon_type['type']['name'])
+        return output
+
+    @staticmethod
+    def parse_stats(stats: list):
+        """
+        Parses the Pokemon's raw stats data into a processable
+        default format.
+
+        :param stats: a list of dict that contains the API data about
+                      the pokemon.
+        :return: a list of tuples that contain information about
+                 the pokemon's stats.
+        """
+        output = []
+        for stat in stats:
+            base_stat = ""
+            name = ""
+            for key, value in stat.items():
+                if key == 'base_stat':
+                    base_stat = value
+                if key == 'stat':
+                    name = value['name']
+            output.append((name, base_stat))
+        return output
+
+    @staticmethod
+    def parse_abilities(abilities: list):
+        """
+        Parses the Pokemon's raw ability data into a processable
+        default format.
+
+        :param abilities: a list of dict that contains the API data about
+                          the pokemon.
+        :return: a list of strings that contain information
+                 about the pokemon's ability
+        """
+        output = []
+        for ability in abilities:
+            output.append(ability['ability']['name'])
+        return output
+
+    @staticmethod
+    def parse_moves(moves: list):
+        """
+        Parses the Pokemon's raw attacking move data into a
+        processable default format.
+
+        :param moves: a list of dict that contains the API data about
+                      the pokemon.
+        :return: a list of tuples that contain information about
+                 the pokemon's attack moves.
+        """
+        output = []
+        for move in moves:
+            name = ""
+            level_learned = ""
+            for key, value in move.items():
+                if key == 'move':
+                    name = value['name']
+                if key == 'version_group_details':
+                    level_learned = value[0]['level_learned_at']
+            output.append((name, level_learned))
+        return output
 
     def __str__(self):
-        return f"Pokemon: {self.name.title()}\n" \
+        return f"Pokemon: {self.name}\n" \
                f"ID: {self.id}\n" \
                f"Height: {self.height}\n" \
-               f"Weight: {self.weight}\n" \
-               f"Type: {', '.join(self.type)}\n" \
-               f"Stats: {self.stats}\n" \
-               f"Abilities: {', '.join(self.abilities)}\n" \
-               f"Moves: {self.moves}\n"
+               f"Weight: {self.weight}\n"
+               # f"Type: {', '.join(self.type)}\n" \
+               # f"Stats: {self.stats}\n" \
+               # f"Abilities: {', '.join(self.abilities)}\n" \
+               # f"Moves: {self.moves}\n"
 
 
 class PokemonAbility(PokedexObject):
-    def __init__(self, name: str, ability_id: int, generation: str,
-                 effect: str, effect_short: str, pokemons: list, **kwargs):
-        super().__init__(name, ability_id, **kwargs)
+
+    def __init__(self, name: str, id: int, generation: str,
+                 effect: str, effect_short: str, pokemon: list, **kwargs):
+        super().__init__(name, id, **kwargs)
         self.generation = generation
 
         # removes double space btwn lines
         self.effect = effect.replace('\n\n', '')
 
         self.effect_short = effect_short
-        self.pokemon = self.parser.parse_pokemon(pokemons)
+        self.pokemon = self.parse_pokemon(pokemon)
+
+    @staticmethod
+    def parse_pokemon(pokemons: list):
+        output = []
+        for pokemon in pokemons:
+            output.append(pokemon["pokemon"]["name"])
+        return output
 
     @staticmethod
     def format_list(lines: str) -> str:
@@ -85,9 +158,10 @@ class PokemonAbility(PokedexObject):
 
 
 class PokemonStat(PokedexObject):
-    def __init__(self, name: str, stat_id: int, is_battle_only: bool,
+
+    def __init__(self, name: str, id: int, is_battle_only: bool,
                  **kwargs):
-        super().__init__(name, stat_id, **kwargs)
+        super().__init__(name, id, **kwargs)
         self.is_battle_only = is_battle_only
 
     def __str__(self):
@@ -98,10 +172,10 @@ class PokemonStat(PokedexObject):
 
 class PokemonMove(PokedexObject):
 
-    def __init__(self, name: str, move_id: int, generation: str, accuracy: int,
+    def __init__(self, name: str, id: int, generation: str, accuracy: int,
                  pp: int, power: int, move_type: str, dmg_class: str,
                  effect_short: str, **kwargs):
-        super().__init__(name, move_id, **kwargs)
+        super().__init__(name, id, **kwargs)
         self.generation = generation
         self.accuracy = accuracy
         self.effect_short = effect_short

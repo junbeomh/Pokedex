@@ -75,41 +75,41 @@ class PokedexAPI:
 
 def main():
     pokedex = PokedexAPI()
-    # loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(loop)
-    # requests = ["charmander", "squirtle", "bulbasaur", "pikachu", "151"]
-    # pokemons = loop.run_until_complete(pokedex.process_requests("pokemon",
-    #                                                             requests))
-    #
-    # pokemon_list = [Pokemon(pokemon['name'],
-    #                         int(pokemon['id']),
-    #                         int(pokemon['height']),
-    #                         int(pokemon['weight']),
-    #                         pokemon['types'],
-    #                         pokemon['stats'],
-    #                         pokemon['abilities'],
-    #                         pokemon['moves'])
-    #                 for pokemon in pokemons]
-    #
-    # for pokemon in pokemon_list:
-    #     print(pokemon)
-    #
-    # requests = ["surf", "cut", "ice-punch"]
-    # loop = asyncio.new_event_loop()
-    # asyncio.set_event_loop(loop)
-    # moves = loop.run_until_complete(pokedex.process_requests("move", requests))
-    # move_list = [PokemonMove(move['name'],
-    #                          int(move['id']),
-    #                          move['generation']['name'],
-    #                          int(move['accuracy']),
-    #                          int(move['pp']),
-    #                          int(move['power']),
-    #                          move['type']['name'],
-    #                          move['damage_class']['name'],
-    #                          move['effect_entries'][0]['short_effect'])
-    #              for move in moves]
-    # for move in move_list:
-    #     print(move)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    requests = ["charmander", "squirtle", "bulbasaur", "pikachu", "151"]
+    pokemons = loop.run_until_complete(pokedex.process_requests("pokemon",
+                                                                requests))
+
+    pokemon_list = [Pokemon(pokemon['name'],
+                            int(pokemon['id']),
+                            int(pokemon['height']),
+                            int(pokemon['weight']),
+                            pokemon['types'],
+                            pokemon['stats'],
+                            pokemon['abilities'],
+                            pokemon['moves'])
+                    for pokemon in pokemons]
+
+    for pokemon in pokemon_list:
+        print(pokemon)
+
+    requests = ["surf", "cut", "ice-punch"]
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    moves = loop.run_until_complete(pokedex.process_requests("move", requests))
+    move_list = [PokemonMove(move['name'],
+                             int(move['id']),
+                             move['generation']['name'],
+                             int(move['accuracy']),
+                             int(move['pp']),
+                             int(move['power']),
+                             move['type']['name'],
+                             move['damage_class']['name'],
+                             move['effect_entries'][0]['short_effect'])
+                 for move in moves]
+    for move in move_list:
+        print(move)
 
     requests = ["battle-armor", "sturdy", "levitate"]
     loop = asyncio.new_event_loop()
