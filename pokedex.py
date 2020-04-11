@@ -16,11 +16,6 @@ class PokedexMode(Enum):
 
 
 class Request:
-    factory_map = {
-        PokedexMode.POKEMON: PokemonFactory,
-        PokedexMode.ABILITY: PokemonAbilityFactory,
-        PokedexMode.MOVE: PokemonMoveFactory
-    }
 
     """
     A request object represents a request specifications about
@@ -33,7 +28,7 @@ class Request:
         """
         Initializes a Request object.
 
-        :param mode: a string, the mode ofe the intended request.
+        :param mode: a string, the mode of the intended request.
         :param expanded: a boolean, to indicate the request result's
                          data representation. True for extended, and
                          False for default mode.
@@ -77,10 +72,16 @@ class Request:
 
 
 class Pokedex:
+    
+    factory_map = {
+        PokedexMode.POKEMON: PokemonFactory,
+        PokedexMode.ABILITY: PokemonAbilityFactory,
+        PokedexMode.MOVE: PokemonMoveFactory
+    }
 
     def __init__(self, request):
         self.request = request
-        self.factory = request.factory_map[PokedexMode(self.request.mode)]
+        self.factory = self.factory_map[PokedexMode(self.request.mode)]
         self.container = []
 
     def get_pokemon_objects(self):
