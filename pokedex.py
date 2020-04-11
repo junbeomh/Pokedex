@@ -48,10 +48,10 @@ class Request:
         self.output_file = output_file
         self.api = PokedexAPI()
 
-    def process_file_to_data(self):
+    def __process_file_to_data(self):
         try:
-            with open(file=self.input_file, mode='r', encoding='UTF-8') as file:
-                self.input_data = [line.rstrip('\n').lower() for line in file]
+            with open(file=self.input_file, mode='r', encoding='UTF-8') as f:
+                self.input_data = [line.rstrip('\n').lower() for line in f]
         except OSError as e:
             raise FileNotFoundError(e)
 
@@ -139,8 +139,8 @@ def setup_cmd_line_interface():
 def main():
     try:
         args = setup_cmd_line_interface()
-        request = Request(args.mode, args.expanded, args.inputdata, args.inputfile,
-                      args.output)
+        request = Request(args.mode, args.expanded, args.inputdata, 
+                          args.inputfile, args.output)
         pokedex = Pokedex(request)
         pokedex.generate_report()
     except Exception as e:
