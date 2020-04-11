@@ -1,4 +1,5 @@
 """
+Contains the class definition for Requests and Pokedex.
 """
 
 import argparse
@@ -16,7 +17,6 @@ class PokedexMode(Enum):
 
 
 class Request:
-
     """
     A request object represents a request specifications about
     the program.
@@ -49,6 +49,10 @@ class Request:
         self.api = PokedexAPI()
 
     def __process_file_to_data(self):
+        """
+        Grabs data from input file.
+        :return: None
+        """
         try:
             with open(file=self.input_file, mode='r', encoding='UTF-8') as f:
                 self.input_data = [line.rstrip('\n').lower() for line in f]
@@ -56,6 +60,10 @@ class Request:
             raise FileNotFoundError(e)
 
     def process_request(self) -> list:
+        """
+        Calls the API class to make the HTTP request.
+        :return: a list
+        """
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         info = loop.run_until_complete(
@@ -63,6 +71,10 @@ class Request:
         return info
 
     def __str__(self):
+        """
+        Returns string representation of a Request.
+        :return: a string
+        """
         return f"Request: \n" \
                f"Mode: {self.mode}\n" \
                f"Expanded?: {self.expanded}\n" \
@@ -72,8 +84,9 @@ class Request:
 
 
 class Pokedex:
-
-    """ """
+    """
+    Represents the driver class of the program.
+    """
     factory_map = {
         PokedexMode.POKEMON: PokemonFactory,
         PokedexMode.ABILITY: PokemonAbilityFactory,
@@ -81,11 +94,19 @@ class Pokedex:
     }
 
     def __init__(self, request):
+        """
+        Initializes a Pokedex Object.
+        :param request: a Request
+        """
         self.request = request
         self.factory = self.factory_map[PokedexMode(self.request.mode)]
         self.container = []
 
     def get_pokemon_objects(self):
+        """
+        Gets the PokemonObjects created by the Factory classes.
+        :return: None
+        """
         info = self.request.process_request()
         factory = self.factory(info, is_expanded=self.request.expanded)
         for pokemon_object in factory.create():
@@ -93,6 +114,11 @@ class Pokedex:
             self.container.append(pokemon_object)
 
     def generate_report(self):
+        """
+        Writes the report of the request to a .txt file. Output.txt is the
+        default if no file is specified.
+        :return: None
+        """
         self.get_pokemon_objects()
         if self.request.output_file is None:
             output_file = "output.txt"
@@ -138,6 +164,10 @@ def setup_cmd_line_interface():
 
 
 def main():
+    """
+    Initializes a pokedex simulation.
+    :return: None
+    """
     try:
         args = setup_cmd_line_interface()
         request = Request(args.mode, args.expanded, args.inputdata, 
@@ -151,4 +181,5 @@ def main():
 
 
 if __name__ == "__main__":
+    """Starts and executes a pokedex simulation"""
     main()

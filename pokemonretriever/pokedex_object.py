@@ -1,21 +1,39 @@
+"""
+Contains the class definition for PokedexObjects and its child classes.
+"""
 from abc import ABC
 
 
 class PokedexObject(ABC):
-
+    """
+    Represents an item in the pokedex.
+    """
     def __init__(self, name: str, id: int):
+        """
+        Instantiates a PokedexObject.
+        :param name: a string
+        :param id: an int
+        """
         self.name = name.title()
         self.id = id
 
 
 class Pokemon(PokedexObject):
     """
+    Represents a pokemon in the pokedex.
     """
-
     def __init__(self, height: int, weight: int,
                  types: [str], stats: list, abilities: [list],
                  moves: list, **kwargs):
         """
+        Instantiztes a Pokemon.
+        :param height: an int
+        :param weight: an int
+        :param types: a list of strings
+        :param stats: a list of stats
+        :param abilities: a list of abilities
+        :param moves: a list of moves
+        :param kwargs: a dictionary of named arguments and values.
         """
         super().__init__(**kwargs)
         self.height = height
@@ -104,6 +122,10 @@ class Pokemon(PokedexObject):
         return output
 
     def __str__(self):
+        """
+        Returns a string representation of a pokemon.
+        :return: a string
+        """
         formatted = "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
         formatted += f"Pokemon: {self.name}\n" \
                      f"ID: {self.id}\n" \
@@ -129,9 +151,21 @@ class Pokemon(PokedexObject):
 
 
 class PokemonAbility(PokedexObject):
-
+    """
+    Represents an ability in the pokedex.
+    """
     def __init__(self, name: str, id: int, generation: str,
                  effect: str, effect_short: str, pokemon: list, **kwargs):
+        """
+        Instantiates a PokemonAbility.
+        :param name: a string
+        :param id: an int
+        :param generation: a string
+        :param effect: a string
+        :param effect_short: a string
+        :param pokemon: a list of pokemon
+        :param kwargs: a dictionary of named arguments and values.
+        """
         super().__init__(name, id, **kwargs)
         self.generation = generation
         # removes double space btwn lines
@@ -141,6 +175,11 @@ class PokemonAbility(PokedexObject):
 
     @staticmethod
     def __format_pokemon(pokemons: list):
+        """
+        Parses the list of pokemon into a processable default format.
+        :param pokemons: a list
+        :return: a list
+        """
         output = []
         for pokemon in pokemons:
             output.append(pokemon["pokemon"]["name"])
@@ -148,6 +187,11 @@ class PokemonAbility(PokedexObject):
 
     @staticmethod
     def __format_list(lines: str) -> str:
+        """
+        Parses lines into a processable default format.
+        :param lines: a string
+        :return: a string
+        """
         lines_list = lines.split(".")
         formatted_output = ""
         for line in lines_list:
@@ -157,6 +201,10 @@ class PokemonAbility(PokedexObject):
         return formatted_output
 
     def __str__(self):
+        """
+        Returns a string representation of an Ability.
+        :return: a string
+        """
         return f"-----------------------------------\n" \
                f"Ability: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
@@ -167,12 +215,23 @@ class PokemonAbility(PokedexObject):
 
 
 class PokemonStat(PokedexObject):
-
+    """
+    Represents a stat in the pokedex.
+    """
     def __init__(self, is_battle_only: bool, **kwargs):
+        """
+        Instantiates a stat.
+        :param is_battle_only: a boolean
+        :param kwargs: a dictionary of named arguments and values.
+        """
         super().__init__(**kwargs)
         self.is_battle_only = is_battle_only
 
     def __str__(self):
+        """
+        Returns a string representation of a Stat.
+        :return: a string
+        """
         return f"-----------------------------------\n" \
                f"Stat: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
@@ -180,10 +239,25 @@ class PokemonStat(PokedexObject):
 
 
 class PokemonMove(PokedexObject):
-
+    """
+    Represents a move in the pokedex.
+    """
     def __init__(self, name: str, id: int, generation: str, accuracy: int,
                  pp: int, power: int, type: str, damage_class: str,
                  effect_short: str, **kwargs):
+        """
+        Instantiates a move.
+        :param name: a string
+        :param id: an int
+        :param generation: a string
+        :param accuracy: an int
+        :param pp: an int
+        :param power: an int
+        :param type: a string
+        :param damage_class: a string
+        :param effect_short: a string
+        :param kwargs: a dictionary of named arguments and values.
+        """
         super().__init__(name, id, **kwargs)
         self.generation = generation
         self.accuracy = accuracy
@@ -194,6 +268,10 @@ class PokemonMove(PokedexObject):
         self.damage_class = damage_class
 
     def __str__(self):
+        """
+        Returns a string represntation of a move.
+        :return: a string
+        """
         return f"-----------------------------------\n" \
                f"Move: : {self.name.title()}\n" \
                f"ID: {self.id}\n" \

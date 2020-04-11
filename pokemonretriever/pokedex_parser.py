@@ -1,27 +1,48 @@
 """
-
+Contains the class definitions for parsers to clean up the data from
+the API calls.
 """
-
 from abc import ABC, abstractmethod
 
 
 class PokedexDataParser(ABC):
-
+    """
+    Represents the parent parser class.
+    """
     def __init__(self):
+        """
+        Instantiates a PokedexDataParser
+        """
         self.json = None
 
     @staticmethod
     @abstractmethod
-    def parse(json, value):
+    def parse(json):
+        """
+        Parses data to fit the parameters of PokedexObjects.
+        :param json: a dictionary
+        :return:
+        """
         pass
 
 
 class PokedexPokemonParser(PokedexDataParser):
+    """
+    Pareses data for Pokemon Object parameters.
+    """
     def __init__(self):
+        """
+        Instantiates the PokedexPokemonParser.
+        """
         super().__init__()
 
     @staticmethod
     def parse(json):
+        """
+        Parses data to fit the parameters of Pokemon Objects.
+        :param json: a dictionary
+        :return: a dictionary
+        """
         pokemon = json
         name = pokemon["name"]
         id = int(pokemon["id"])
@@ -37,12 +58,22 @@ class PokedexPokemonParser(PokedexDataParser):
 
 
 class PokedexAbilityParser(PokedexDataParser):
-
+    """
+    Pareses data for Ability Object parameters.
+    """
     def __init__(self):
+        """
+        Instantiates a PokedexAbilityParser Object.
+        """
         super().__init__()
 
     @staticmethod
     def parse(json):
+        """
+        Parses data to fit the parameters of Ability Objects.
+        :param json: a dictionary
+        :return: a dictionary
+        """
         ability = json
         name = ability["name"]
         id = int(ability["id"])
@@ -56,12 +87,22 @@ class PokedexAbilityParser(PokedexDataParser):
 
 
 class PokedexStatParser(PokedexDataParser):
-
+    """
+    Pareses data for Stat Object parameters.
+    """
     def __init__(self):
+        """
+        Instantiates a PokedexStatParser Object.
+        """
         super().__init__()
 
     @staticmethod
-    def parse(json, value=None):
+    def parse(json):
+        """
+        Parses data to fit the parameters of Stat Objects.
+        :param json: a dictionary
+        :return: a dictionary
+        """
         stat = json
         name = stat["name"]
         id = int(stat["id"])
@@ -70,12 +111,22 @@ class PokedexStatParser(PokedexDataParser):
 
 
 class PokedexMoveParser(PokedexDataParser):
-
+    """
+    Pareses data for Move Object parameters.
+    """
     def __init__(self):
+        """
+        Instantiates a PokedexMoveParser Object.
+        """
         super().__init__()
 
     @staticmethod
     def parse(json):
+        """
+        Parses data to fit the parameters of Move Objects.
+        :param json: a dictionary
+        :return: a dictionary
+        """
         move = json
         name = move["name"]
         id = move['id'],

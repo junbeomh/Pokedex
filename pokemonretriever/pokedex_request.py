@@ -1,6 +1,6 @@
 """
+Contains class definitions for the API.
 """
-
 
 import aiohttp
 import asyncio
@@ -74,11 +74,3 @@ class PokedexAPI:
                               list_urls]
                 responses = await asyncio.gather(*coroutines)
                 return responses
-
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-    main()
