@@ -16,7 +16,6 @@ class PokedexMode(Enum):
 
 
 class Request:
-
     factory_map = {
         PokedexMode.POKEMON: PokemonFactory,
         PokedexMode.ABILITY: PokemonAbilityFactory,
@@ -28,7 +27,7 @@ class Request:
     the program.
     """
 
-    def __init__(self, mode: str, expanded: bool, input_data: str = None,
+    def __init__(self, mode: str, expanded: bool = False, input_data: str = None,
                  input_file: str = None, output_file: str = None):
         """
         Initializes a Request object.
@@ -43,24 +42,24 @@ class Request:
                             that contains data of the request.
         """
         self.mode = mode
-        self.expanded = expanded
+        self.expanded = expanded if expanded is not None else False
         self.input_data = [input_data]
         self.input_file = input_file
         if input_file:
             self.process_file_to_data()
         self.output_file = output_file
-        self.pokedexAPI = PokedexAPI()
+        self.api = PokedexAPI()
 
     def process_file_to_data(self):
-        with open(file=self.input_file, mode="r", encoding="UTF-8") as file:
-            self.input_data = [line.strip("\n") for line in file]
+        with open(file=self.input_file, mode='r', encoding='UTF-8') as file:
+            self.input_data = [line.rstrip('\n').lower() for line in file]
 
     def process_request(self) -> list:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         info = loop.run_until_complete(
-            self.pokedexAPI.process_requests(self.mode, self.input_data))
-        return [info]
+            self.api.process_requests(self.mode, self.input_data))
+        return info
 
     def __str__(self):
         return f"Request: \n" \
@@ -87,6 +86,7 @@ class Pokedex:
 
     def generate_report(self):
         self.get_pokemon_objects()
+        output_file = ""
         with open(file="output.txt", mode="w+", encoding="UTF-8") as file:
             for objects in self.container:
                 file.write(str(objects))
