@@ -1,11 +1,22 @@
-# COMP3522_Assignment3_A01064824_A00959199
+# COMP3522_Assignment3
+
+John (JunBeom) Han: A01064824
+Joshua Lam: A00959199
+
+Use case:
+ - normal mode: 
+    - file: python3 pokedex.py pokemon --inputfile "input.txt"
+    - data: python3 pokedex.py move --inputdata "1"
+ - expanded mode:
+    - file: python3 pokedex.py pokemon --inputfile "input.txt" --expanded
+    - data: python3 pokedex.py pokemon --inputdata "1" --expanded
 
 Our pokedex application has five modules:
  - pokedex.py
  - pokedex_object.py
  - pokedex_object_factory.py
  - pokedex_parser.py
- - pokedex-request.py
+ - pokedex-request.py 
  
 Pokedex.py
  - This module is responsible for handling client side code. We handle the
