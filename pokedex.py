@@ -44,6 +44,7 @@ class Request:
         self.mode = mode
         self.expanded = expanded if expanded is not None else False
         self.input_data = [input_data]
+        print(type(self.input_data))
         self.input_file = input_file
         if input_file:
             self.process_file_to_data()

@@ -23,6 +23,7 @@ class PokedexPokemonParser(PokedexDataParser):
     @staticmethod
     def parse(json):
         pokemon = json
+        print("hello world")
         name = pokemon["name"]
         id = int(pokemon["id"])
         height = int(pokemon["height"])
@@ -90,4 +91,3 @@ class PokedexMoveParser(PokedexDataParser):
                 "accuracy": accuracy, "pp": pp, "power": power,
                 "type": move_type, "damage_class": dmg_class,
                 'effect_short': effect_short}
-

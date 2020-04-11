@@ -64,15 +64,16 @@ class PokedexAPI:
                          names.
         :return: a dict, json representation of GET http response.
         """
-        if len(requests) == 1:
+        if isinstance(requests, str):
             return await self.process_single_request(req_type, requests[0])
-        async with self.session() as session:
-            list_urls = [self.url.format(req_type, req_id) for
+        else:
+            async with self.session() as session:
+                list_urls = [self.url.format(req_type, req_id) for
                          req_id in requests]
-            coroutines = [self.get_pokedex_data(url, session) for url in
+                coroutines = [self.get_pokedex_data(url, session) for url in
                           list_urls]
-            responses = await asyncio.gather(*coroutines)
-            return responses
+                responses = await asyncio.gather(*coroutines)
+                return responses
 
 
 def main():

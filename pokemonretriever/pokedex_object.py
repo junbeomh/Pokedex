@@ -104,9 +104,6 @@ class Pokemon(PokedexObject):
         return output
 
     def __str__(self):
-        print(self.name)
-        print(type(self))
-        print('hello world')
         return f"Pokemon: {self.name}\n" \
                f"ID: {self.id}\n" \
                f"Height: {self.height}\n" \

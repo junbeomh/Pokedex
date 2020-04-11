@@ -73,6 +73,7 @@ class PokemonFactory(PokedexObjectFactory):
             yield Pokemon(**pokemon_parcer)
 
     def create_mode_expanded(self):
+        print(len(self.data_set))
         for data in self.data_set:
             pokemon_parcer = PokedexPokemonParser.parse(data)
             pokemon = Pokemon(**pokemon_parcer)
