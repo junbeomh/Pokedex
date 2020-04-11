@@ -136,20 +136,22 @@ class Pokemon(PokedexObject):
             stats = [str(stat) for stat in self.stats]
             formatted += ''.join(stats)
             formatted += "</Pokemon Stats>\n"
+        else:
+            formatted += f"Stats: {self.stats}\n"
         if isinstance(self.moves[0], PokemonMove):
             formatted += "\n<Pokemon Moves>\n"
             moves = [str(move) for move in self.moves]
             formatted += ''.join(moves)
             formatted += "</Pokemon Moves>\n"
+        else:
+            formatted += f"Moves: {self.moves}\n"
         if isinstance(self.abilities[0], PokemonAbility):
             formatted += "\n<Pokemon Abilities>\n"
             abilities = [str(ability) for ability in self.abilities]
             formatted += ''.join(abilities)
             formatted += "</Pokemon Abilities>\n"
-        formatted += f"Stats: {self.stats}\n" \
-                     f"Abilities: {', '.join(self.abilities)}\n" \
-                     f"Moves: {self.moves}\n"
-
+        else:
+            formatted += f"Abilities: {', '.join(self.abilities)}\n"
         formatted += "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
         return formatted
 
