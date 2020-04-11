@@ -37,7 +37,7 @@ class Request:
         :param output_file: a string, the name of the output file
                             that contains data of the request.
         """
-        if ".txt" not in input_file:
+        if input_file is not None and ".txt" not in input_file:
             raise Exception("File extension must be .txt")
         self.mode = mode
         self.expanded = expanded if expanded is not None else False
