@@ -84,12 +84,12 @@ class PokemonFactory(PokedexObjectFactory):
                 move_name.append(data["moves"][i]['move']['name'])
             for i in range(0, len(data["stats"])):
                 stats_name.append(data["stats"][i]["stat"]["url"][-2])
-            pokemon.stats = self.add_expanded_stats(stats_name)
-            pokemon.moves = self.add_expanded_moves(move_name)
-            pokemon.abilities = self.add_expanded_abilities(ability_name)
+            pokemon.stats = self.__add_expanded_stats(stats_name)
+            pokemon.moves = self.__add_expanded_moves(move_name)
+            pokemon.abilities = self.__add_expanded_abilities(ability_name)
             yield pokemon
 
-    def add_expanded_stats(self, number):
+    def __add_expanded_stats(self, number):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         stats = loop.run_until_complete(self.api.process_requests(
@@ -100,7 +100,7 @@ class PokemonFactory(PokedexObjectFactory):
             stat_list.append(stat)
         return stat_list
 
-    def add_expanded_abilities(self, name):
+    def __add_expanded_abilities(self, name):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         abilities = loop.run_until_complete(self.api.process_requests(
@@ -111,7 +111,7 @@ class PokemonFactory(PokedexObjectFactory):
             ability_list.append(ability)
         return ability_list
 
-    def add_expanded_moves(self, name):
+    def __add_expanded_moves(self, name):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         moves = loop.run_until_complete(self.api.process_requests(

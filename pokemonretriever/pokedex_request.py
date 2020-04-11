@@ -28,7 +28,7 @@ class PokedexAPI:
         self.session = aiohttp.ClientSession
 
     @staticmethod
-    async def get_pokedex_data(url: str, session: aiohttp.ClientSession):
+    async def __get_pokedex_data(url: str, session: aiohttp.ClientSession):
         """
         Retrieves pokemon data through the execution of GET http
         requests.
@@ -42,7 +42,7 @@ class PokedexAPI:
         json_response = await response.json()
         return json_response
 
-    async def process_single_request(self, req_type: str, req_id: str):
+    async def __process_single_request(self, req_type: str, req_id: str):
         """
         Executes a single HTTP GET request to retrieve pokemon data.
 
@@ -52,7 +52,7 @@ class PokedexAPI:
         """
         request_url = self.url.format(req_type, req_id)
         async with self.session() as session:
-            response = await self.get_pokedex_data(request_url, session)
+            response = await self.__get_pokedex_data(request_url, session)
             return response
 
     async def process_requests(self, req_type: str, requests: list):
@@ -65,12 +65,12 @@ class PokedexAPI:
         :return: a dict, json representation of GET http response.
         """
         if isinstance(requests, str):
-            return await self.process_single_request(req_type, requests[0])
+            return await self.__process_single_request(req_type, requests[0])
         else:
             async with self.session() as session:
                 list_urls = [self.url.format(req_type, req_id) for
                              req_id in requests]
-                coroutines = [self.get_pokedex_data(url, session) for url in
+                coroutines = [self.__get_pokedex_data(url, session) for url in
                               list_urls]
                 responses = await asyncio.gather(*coroutines)
                 return responses

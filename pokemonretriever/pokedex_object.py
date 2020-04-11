@@ -20,13 +20,13 @@ class Pokemon(PokedexObject):
         super().__init__(**kwargs)
         self.height = height
         self.weight = weight
-        self.type = self.format_pokemon_type(types)
-        self.stats = self.format_stats(stats)
-        self.abilities = self.format_abilities(abilities)
-        self.moves = self.format_moves(moves)
+        self.type = self.__format_pokemon_type(types)
+        self.stats = self.__format_stats(stats)
+        self.abilities = self.__format_abilities(abilities)
+        self.moves = self.__format_moves(moves)
 
     @staticmethod
-    def format_pokemon_type(types: list):
+    def __format_pokemon_type(types: list):
         """
         Parses the Pokemon's raw type data into a processable
         default format.
@@ -42,7 +42,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def format_stats(stats: list):
+    def __format_stats(stats: list):
         """
         Parses the Pokemon's raw stats data into a processable
         default format.
@@ -65,7 +65,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def format_abilities(abilities: list):
+    def __format_abilities(abilities: list):
         """
         Parses the Pokemon's raw ability data into a processable
         default format.
@@ -81,7 +81,7 @@ class Pokemon(PokedexObject):
         return output
 
     @staticmethod
-    def format_moves(moves: list):
+    def __format_moves(moves: list):
         """
         Parses the Pokemon's raw attacking move data into a
         processable default format.
@@ -108,26 +108,22 @@ class Pokemon(PokedexObject):
         formatted += f"Pokemon: {self.name}\n" \
                      f"ID: {self.id}\n" \
                      f"Weight: {self.weight}\n"\
-                     f"Type: {self.type}\n" \
-
+                     f"Type: {self.type}\n"
         if isinstance(self.stats[0], PokemonStat):
             formatted += "\n<Pokemon Stats>\n"
             stats = [str(stat) for stat in self.stats]
             formatted += ''.join(stats)
             formatted += "</Pokemon Stats>\n"
-
         if isinstance(self.moves[0], PokemonMove):
             formatted += "\n<Pokemon Moves>\n"
             moves = [str(move) for move in self.moves]
             formatted += ''.join(moves)
             formatted += "</Pokemon Moves>\n"
-
         if isinstance(self.abilities[0], PokemonAbility):
             formatted += "\n<Pokemon Abilities>\n"
             abilities = [str(ability) for ability in self.abilities]
             formatted += ''.join(abilities)
             formatted += "</Pokemon Abilities>\n"
-        
         formatted += "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
         return formatted
 
@@ -141,17 +137,17 @@ class PokemonAbility(PokedexObject):
         # removes double space btwn lines
         self.effect = effect.replace('\n\n', '')
         self.effect_short = effect_short
-        self.pokemon = self.format_pokemon(pokemon)
+        self.pokemon = self.__format_pokemon(pokemon)
 
     @staticmethod
-    def format_pokemon(pokemons: list):
+    def __format_pokemon(pokemons: list):
         output = []
         for pokemon in pokemons:
             output.append(pokemon["pokemon"]["name"])
         return output
 
     @staticmethod
-    def format_list(lines: str) -> str:
+    def __format_list(lines: str) -> str:
         lines_list = lines.split(".")
         formatted_output = ""
         for line in lines_list:
@@ -166,7 +162,7 @@ class PokemonAbility(PokedexObject):
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
                f"Short Effect: {self.effect_short}\n" \
-               f"Effect: {self.format_list(self.effect)}\n" \
+               f"Effect: {self.__format_list(self.effect)}\n" \
                f"Pokemon: {self.pokemon}\n"
 
 
@@ -196,7 +192,6 @@ class PokemonMove(PokedexObject):
         self.power = power
         self.type = type
         self.damage_class = damage_class
-        print(self.generation)
 
     def __str__(self):
         return f"-----------------------------------\n" \
