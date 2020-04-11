@@ -146,6 +146,10 @@ class Pokemon(PokedexObject):
             abilities = [str(ability) for ability in self.abilities]
             formatted += ''.join(abilities)
             formatted += "</Pokemon Abilities>\n"
+        formatted += f"Stats: {self.stats}\n" \
+                     f"Abilities: {', '.join(self.abilities)}\n" \
+                     f"Moves: {self.moves}\n"
+
         formatted += "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
         return formatted
 
