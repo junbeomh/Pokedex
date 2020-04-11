@@ -44,7 +44,7 @@ class Request:
         self.input_data = [input_data]
         self.input_file = input_file
         if input_file:
-            self.process_file_to_data()
+            self.__process_file_to_data()
         self.output_file = output_file
         self.api = PokedexAPI()
 
@@ -72,7 +72,8 @@ class Request:
 
 
 class Pokedex:
-    
+
+    """ """
     factory_map = {
         PokedexMode.POKEMON: PokemonFactory,
         PokedexMode.ABILITY: PokemonAbilityFactory,
