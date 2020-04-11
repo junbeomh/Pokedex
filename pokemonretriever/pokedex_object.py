@@ -3,7 +3,7 @@ from abc import ABC
 
 class PokedexObject(ABC):
 
-    def __init__(self, name: str, id: int, **kwargs):
+    def __init__(self, name: str, id: int):
         self.name = name.title()
         self.id = id
 
@@ -104,14 +104,32 @@ class Pokemon(PokedexObject):
         return output
 
     def __str__(self):
-        return f"Pokemon: {self.name}\n" \
-               f"ID: {self.id}\n" \
-               f"Height: {self.height}\n" \
-               f"Weight: {self.weight}\n"\
-               f"Type: {self.type}\n" \
-               f"Stats: {[stat for stat in self.stats]}\n" \
-               f"Abilities: {[stat for stat in self.abilities]}\n" \
-               f"Moves: {[stat for stat in self.moves]}\n"
+        formatted = "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
+        formatted += f"Pokemon: {self.name}\n" \
+                     f"ID: {self.id}\n" \
+                     f"Weight: {self.weight}\n"\
+                     f"Type: {self.type}\n" \
+
+        if isinstance(self.stats[0], PokemonStat):
+            formatted += "\n<Pokemon Stats>\n"
+            stats = [str(stat) for stat in self.stats]
+            formatted += ''.join(stats)
+            formatted += "</Pokemon Stats>\n"
+
+        if isinstance(self.moves[0], PokemonMove):
+            formatted += "\n<Pokemon Moves>\n"
+            moves = [str(move) for move in self.moves]
+            formatted += ''.join(moves)
+            formatted += "</Pokemon Moves>\n"
+
+        if isinstance(self.abilities[0], PokemonAbility):
+            formatted += "\n<Pokemon Abilities>\n"
+            abilities = [str(ability) for ability in self.abilities]
+            formatted += ''.join(abilities)
+            formatted += "</Pokemon Abilities>\n"
+        
+        formatted += "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"
+        return formatted
 
 
 class PokemonAbility(PokedexObject):
@@ -120,13 +138,10 @@ class PokemonAbility(PokedexObject):
                  effect: str, effect_short: str, pokemon: list, **kwargs):
         super().__init__(name, id, **kwargs)
         self.generation = generation
-
         # removes double space btwn lines
         self.effect = effect.replace('\n\n', '')
-
         self.effect_short = effect_short
         self.pokemon = self.format_pokemon(pokemon)
-
 
     @staticmethod
     def format_pokemon(pokemons: list):
@@ -146,7 +161,8 @@ class PokemonAbility(PokedexObject):
         return formatted_output
 
     def __str__(self):
-        return f"Ability: {self.name.title()}\n" \
+        return f"-----------------------------------\n" \
+               f"Ability: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
                f"Short Effect: {self.effect_short}\n" \
@@ -161,7 +177,8 @@ class PokemonStat(PokedexObject):
         self.is_battle_only = is_battle_only
 
     def __str__(self):
-        return f"Stat: {self.name.title()}\n" \
+        return f"-----------------------------------\n" \
+               f"Stat: {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Is Battle Only: {self.is_battle_only}\n"
 
@@ -179,9 +196,11 @@ class PokemonMove(PokedexObject):
         self.power = power
         self.type = type
         self.damage_class = damage_class
+        print(self.generation)
 
     def __str__(self):
-        return f"Move: : {self.name.title()}\n" \
+        return f"-----------------------------------\n" \
+               f"Move: : {self.name.title()}\n" \
                f"ID: {self.id}\n" \
                f"Generation: {self.generation}\n" \
                f"Accuracy: {self.accuracy}\n" \

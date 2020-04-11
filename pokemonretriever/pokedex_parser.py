@@ -23,7 +23,6 @@ class PokedexPokemonParser(PokedexDataParser):
     @staticmethod
     def parse(json):
         pokemon = json
-        print("hello world")
         name = pokemon["name"]
         id = int(pokemon["id"])
         height = int(pokemon["height"])
@@ -65,7 +64,7 @@ class PokedexStatParser(PokedexDataParser):
     def parse(json, value=None):
         stat = json
         name = stat["name"]
-        id = stat["id"]
+        id = int(stat["id"])
         is_battle_only = stat["is_battle_only"]
         return {'name': name, 'id': id, "is_battle_only": is_battle_only}
 
@@ -79,7 +78,7 @@ class PokedexMoveParser(PokedexDataParser):
     def parse(json):
         move = json
         name = move["name"]
-        id = int(move['id']),
+        id = move['id'],
         generation = move['generation']['name'],
         accuracy = move['accuracy'],
         pp = int(move['pp']),
@@ -87,7 +86,7 @@ class PokedexMoveParser(PokedexDataParser):
         move_type = move['type']['name'],
         dmg_class = move['damage_class']['name'],
         effect_short = move['effect_entries'][0]['short_effect']
-        return {'name': name, 'id': id, 'generation': generation,
-                "accuracy": accuracy, "pp": pp, "power": power,
-                "type": move_type, "damage_class": dmg_class,
+        return {'name': name, 'id': int(id[0]), 'generation': generation[0],
+                "accuracy": accuracy[0], "pp": pp[0], "power": power[0],
+                "type": move_type[0], "damage_class": dmg_class[0],
                 'effect_short': effect_short}
