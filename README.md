@@ -1,7 +1,6 @@
 # COMP3522_Assignment3
 
-John (JunBeom) Han: A01064824
-Joshua Lam: A00959199
+John(JunBeom) Han: A01064824, Joshua Lam: A00959199
 
 Use case:
  - normal mode: 
