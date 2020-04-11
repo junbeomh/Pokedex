@@ -67,13 +67,11 @@ class PokemonFactory(PokedexObjectFactory):
             return self.create_mode_normal()
 
     def create_mode_normal(self):
-        print(len(self.data_set))
         for data in self.data_set:
             pokemon_parcer = PokedexPokemonParser.parse(data)
             yield Pokemon(**pokemon_parcer)
 
     def create_mode_expanded(self):
-        print(len(self.data_set))
         for data in self.data_set:
             pokemon_parcer = PokedexPokemonParser.parse(data)
             pokemon = Pokemon(**pokemon_parcer)
@@ -133,6 +131,8 @@ def main():
         "pokemon", "151"))
     factory = PokemonFactory(pokemons, True)
     pokemon = factory.create()
+    print(pokemon)
+
 
 if __name__ == "__main__":
     main()

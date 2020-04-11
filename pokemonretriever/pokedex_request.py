@@ -69,73 +69,15 @@ class PokedexAPI:
         else:
             async with self.session() as session:
                 list_urls = [self.url.format(req_type, req_id) for
-                         req_id in requests]
+                             req_id in requests]
                 coroutines = [self.get_pokedex_data(url, session) for url in
-                          list_urls]
+                              list_urls]
                 responses = await asyncio.gather(*coroutines)
                 return responses
 
 
 def main():
-    pokedex = PokedexAPI()
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    requests = ["charmander", "squirtle", "bulbasaur", "pikachu", "151"]
-    pokemons = loop.run_until_complete(pokedex.process_requests("pokemon",
-                                                                requests))
-
-    pokemon_list = [Pokemon(pokemon['name'],
-                            int(pokemon['id']),
-                            int(pokemon['height']),
-                            int(pokemon['weight']),
-                            pokemon['types'],
-                            pokemon['stats'],
-                            pokemon['abilities'],
-                            pokemon['moves'])
-                    for pokemon in pokemons]
-
-    for pokemon in pokemon_list:
-        print(pokemon)
-
-    requests = ["1", "cut", "ice-punch"]
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    moves = loop.run_until_complete(pokedex.process_requests("move", requests))
-    move_list = [PokemonMove(move['name'],
-                             int(move['id']),
-                             move['generation']['name'],
-                             int(move['accuracy']),
-                             int(move['pp']),
-                             int(move['power']),
-                             move['type']['name'],
-                             move['damage_class']['name'],
-                             move['effect_entries'][0]['short_effect'])
-                 for move in moves]
-    for move in move_list:
-        print(move)
-
-    requests = ["1", "sturdy", "levitate"]
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    abilities = loop.run_until_complete(pokedex.process_requests("ability",
-                                                                 requests))
-    ability_list = [PokemonAbility(ability["name"], int(ability["id"]),
-                                   ability["generation"]["name"],
-                                   ability["effect_entries"][0]["effect"],
-                                   ability["effect_entries"][0]["short_effect"],
-                                   ability["pokemon"])
-                    for ability in abilities]
-    for ability in ability_list:
-        print(ability)
-
-    requests = ["speed", "defense", "hp"]
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    stats = loop.run_until_complete(pokedex.process_requests("stat", requests))
-    stat_list = [PokemonStat(stat["name"], stat["id"], stat["is_battle_only"])
-                 for stat in stats]
-    for stat in stat_list:
-        print(stat)
+    pass
 
 
 if __name__ == "__main__":
