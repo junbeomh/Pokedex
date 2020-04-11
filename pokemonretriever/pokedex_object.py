@@ -22,12 +22,8 @@ class Pokemon(PokedexObject):
         self.weight = weight
         self.type = self.format_pokemon_type(types)
         self.stats = self.format_stats(stats)
-        self.stats = stats
         self.abilities = self.format_abilities(abilities)
-        self.abilities = abilities
-
         self.moves = self.format_moves(moves)
-        self.moves = moves
 
     @staticmethod
     def format_pokemon_type(types: list):
@@ -108,14 +104,17 @@ class Pokemon(PokedexObject):
         return output
 
     def __str__(self):
+        print(self.name)
+        print(type(self))
+        print('hello world')
         return f"Pokemon: {self.name}\n" \
                f"ID: {self.id}\n" \
                f"Height: {self.height}\n" \
                f"Weight: {self.weight}\n"\
                f"Type: {self.type}\n" \
-               f"Stats: {[stat.name for stat in self.stats]}\n" \
-               f"Abilities: {[stat.name for stat in self.abilities]}\n" \
-               f"Moves: {[stat.name for stat in self.moves]}\n"
+               f"Stats: {[stat for stat in self.stats]}\n" \
+               f"Abilities: {[stat for stat in self.abilities]}\n" \
+               f"Moves: {[stat for stat in self.moves]}\n"
 
 
 class PokemonAbility(PokedexObject):

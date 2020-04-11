@@ -79,15 +79,18 @@ class Pokedex:
 
     def get_pokemon_objects(self):
         info = self.request.process_request()
-        factory = self.factory(info, self.request.expanded)
+        factory = self.factory(info, is_expanded=self.request.expanded)
         for pokemon_object in factory.create():
             print(pokemon_object)
             self.container.append(pokemon_object)
 
     def generate_report(self):
         self.get_pokemon_objects()
-        output_file = ""
-        with open(file="output.txt", mode="w+", encoding="UTF-8") as file:
+        if self.request.output_file is None:
+            output_file = "output.txt"
+        else:
+            output_file = self.request.output_file
+        with open(file=output_file, mode="w+", encoding="UTF-8") as file:
             for objects in self.container:
                 file.write(str(objects))
 
@@ -104,7 +107,15 @@ def setup_cmd_line_interface():
                         choices=['pokemon', 'move', 'ability'],
                         help="Choose one of the three values to perform"
                              "query.")
-    parser.add_argument("--expanded", type=str,
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--inputfile", type=str,
+                       help="Use this flag when providing a file. The file "
+                            "must be an extension of type .txt")
+    group.add_argument("--inputdata", type=str,
+                       help="Use this flag when providing a data with either "
+                            "name or id. The name must be a digit and id "
+                            "must be a string.")
+    parser.add_argument("--expanded", action="store_true",
                         help="Use this flag if you wish to perform sub-queries"
                              "to get more information about particular "
                              "attributes. Only supported for mode type "
@@ -115,14 +126,6 @@ def setup_cmd_line_interface():
                              "must be an extension of type .txt. If not "
                              "specified, the results will be printed on the "
                              "console.")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--inputfile", type=str,
-                       help="Use this flag when providing a file. The file "
-                            "must be an extension of type .txt")
-    group.add_argument("--inputdata", type=str,
-                       help="Use this flag when providing a data with either "
-                            "name or id. The name must be a digit and id "
-                            "must be a string.")
     return parser.parse_args()
 
 
@@ -130,6 +133,7 @@ def main():
     args = setup_cmd_line_interface()
     request = Request(args.mode, args.expanded, args.inputdata, args.inputfile,
                       args.output)
+    print(request)
     pokedex = Pokedex(request)
     pokedex.generate_report()
 
