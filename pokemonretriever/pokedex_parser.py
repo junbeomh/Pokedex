@@ -15,6 +15,7 @@ class PokedexDataParser(ABC):
     def parse(json, value):
         pass
 
+
 class PokedexPokemonParser(PokedexDataParser):
     def __init__(self):
         super().__init__()
@@ -79,9 +80,9 @@ class PokedexMoveParser(PokedexDataParser):
         name = move["name"]
         id = int(move['id']),
         generation = move['generation']['name'],
-        accuracy = int(move['accuracy']),
+        accuracy = move['accuracy'],
         pp = int(move['pp']),
-        power = int(move['power']),
+        power = move['power'],
         move_type = move['type']['name'],
         dmg_class = move['damage_class']['name'],
         effect_short = move['effect_entries'][0]['short_effect']

@@ -111,11 +111,11 @@ class Pokemon(PokedexObject):
         return f"Pokemon: {self.name}\n" \
                f"ID: {self.id}\n" \
                f"Height: {self.height}\n" \
-               f"Weight: {self.weight}\n"
-               # f"Type: {', '.join(self.type)}\n" \
-               # f"Stats: {self.stats}\n" \
-               # f"Abilities: {', '.join(self.abilities)}\n" \
-               # f"Moves: {self.moves}\n"
+               f"Weight: {self.weight}\n"\
+               f"Type: {self.type}\n" \
+               f"Stats: {[stat.name for stat in self.stats]}\n" \
+               f"Abilities: {[stat.name for stat in self.abilities]}\n" \
+               f"Moves: {[stat.name for stat in self.moves]}\n"
 
 
 class PokemonAbility(PokedexObject):
@@ -173,7 +173,7 @@ class PokemonStat(PokedexObject):
 class PokemonMove(PokedexObject):
 
     def __init__(self, name: str, id: int, generation: str, accuracy: int,
-                 pp: int, power: int, move_type: str, dmg_class: str,
+                 pp: int, power: int, type: str, damage_class: str,
                  effect_short: str, **kwargs):
         super().__init__(name, id, **kwargs)
         self.generation = generation
@@ -181,8 +181,8 @@ class PokemonMove(PokedexObject):
         self.effect_short = effect_short
         self.pp = pp
         self.power = power
-        self.move_type = move_type
-        self.dmg_class = dmg_class
+        self.move_type = type
+        self.damage_class = damage_class
 
     def __str__(self):
         return f"Move: : {self.name.title()}\n" \
@@ -191,6 +191,6 @@ class PokemonMove(PokedexObject):
                f"Accuracy: {self.accuracy}\n" \
                f"PP: {self.pp}\n" \
                f"Power: {self.power}\n" \
-               f"Type: {self.move_type}\n" \
-               f"Damage class: {self.dmg_class}\n" \
+               f"Type: {self.type}\n" \
+               f"Damage class: {self.damage_class}\n" \
                f"Effect: {self.effect_short}\n"

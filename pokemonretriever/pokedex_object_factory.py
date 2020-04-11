@@ -92,6 +92,17 @@ class PokemonFactory(PokedexObjectFactory):
             pokemon.abilities = self.add_expanded_abilities(ability_name)
             yield pokemon
 
+    def add_expanded_stats(self, number):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        stats = loop.run_until_complete(self.api.process_requests(
+            "stat", number))
+        stat_list = []
+        factory = PokemonStatFactory(stats, True)
+        for stat in factory.create():
+            stat_list.append(stat)
+        return stat_list
+
     def add_expanded_abilities(self, name):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
@@ -109,21 +120,10 @@ class PokemonFactory(PokedexObjectFactory):
         moves = loop.run_until_complete(self.api.process_requests(
             "move", name))
         move_list = []
-        factory = PokemonMoveFactory([moves], True)
+        factory = PokemonMoveFactory(moves, True)
         for move in factory.create():
             move_list.append(move)
         return move_list
-
-    def add_expanded_stats(self, number):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        stats = loop.run_until_complete(self.api.process_requests(
-            "stat", number))
-        stat_list = []
-        factory = PokemonStatFactory([stats], True)
-        for stat in factory.create():
-            stat_list.append(stat)
-        return stat_list
 
 
 def main():
@@ -134,10 +134,6 @@ def main():
         "pokemon", "151"))
     factory = PokemonFactory(pokemons, True)
     pokemon = factory.create()
-    print(pokemon.stats)
-    print(pokemon.moves)
-    print(pokemon.abilities)
-
 
 if __name__ == "__main__":
     main()
