@@ -35,7 +35,7 @@ class PokedexAPI:
 
         :param url: a string, the url to make api request with parameters.
         :param session: an aiohttp Client HTTP session.
-        :return: a dict, json representation of GET http response.
+        :return: a list, json representation of GET http response.
         """
         response = await session.request(method="GET", url=url,
                                          ssl=ssl.SSLContext())
@@ -48,7 +48,7 @@ class PokedexAPI:
 
         :param req_type: a string, the category type to request.
         :param req_id: a string, the id or name of pokemon.
-        :return: a dict, json representation of GET http response.
+        :return: a list, json representation of GET http response.
         """
         request_url = self.url.format(req_type, req_id)
         async with self.session() as session:
@@ -62,7 +62,7 @@ class PokedexAPI:
         :param req_type: a string, the category type to request.
         :param requests: a list of strings, a list of pokemon id or
                          names.
-        :return: a dict, json representation of GET http response.
+        :return: a list, json representation of GET http response.
         """
         if isinstance(requests, str):
             return await self.__process_single_request(req_type, requests[0])
