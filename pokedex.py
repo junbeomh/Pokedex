@@ -52,12 +52,10 @@ class Request:
         self.pokedexAPI = PokedexAPI()
 
     def process_file_to_data(self):
-        print(self.input_file)
         with open(file=self.input_file, mode="r", encoding="UTF-8") as file:
             self.input_data = [line.strip("\n") for line in file]
 
     def process_request(self) -> list:
-        print(self.input_data)
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         info = loop.run_until_complete(

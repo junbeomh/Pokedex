@@ -1,0 +1,9 @@
+Move: : Pound
+ID: (1,)
+Generation: ('generation-i',)
+Accuracy: (100,)
+PP: (35,)
+Power: (40,)
+Type: ('normal',)
+Damage class: ('physical',)
+Effect: Inflicts regular damage with no additional effect.

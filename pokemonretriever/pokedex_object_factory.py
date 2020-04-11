@@ -27,7 +27,6 @@ class PokemonStatFactory(PokedexObjectFactory):
         super().__init__(data, is_expanded)
 
     def create(self):
-        print(len(self.data_set))
         for data in self.data_set:
             stat_praser = PokedexStatParser().parse(data)
             yield PokemonStat(**stat_praser)
@@ -86,7 +85,6 @@ class PokemonFactory(PokedexObjectFactory):
                 move_name.append(data["moves"][i]['move']['name'])
             for i in range(0, len(data["stats"])):
                 stats_name.append(data["stats"][i]["stat"]["url"][-2])
-            print(stats_name)
             pokemon.stats = self.add_expanded_stats(stats_name)
             pokemon.moves = self.add_expanded_moves(move_name)
             pokemon.abilities = self.add_expanded_abilities(ability_name)

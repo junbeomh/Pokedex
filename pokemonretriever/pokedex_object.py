@@ -181,7 +181,7 @@ class PokemonMove(PokedexObject):
         self.effect_short = effect_short
         self.pp = pp
         self.power = power
-        self.move_type = type
+        self.type = type
         self.damage_class = damage_class
 
     def __str__(self):
