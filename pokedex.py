@@ -27,8 +27,9 @@ class Request:
     the program.
     """
 
-    def __init__(self, mode: str, expanded: bool = False, input_data: str = None,
-                 input_file: str = None, output_file: str = None):
+    def __init__(self, mode: str, expanded: bool = False, 
+                 input_data: str = None, input_file: str = None, 
+                 output_file: str = None):
         """
         Initializes a Request object.
 
@@ -41,10 +42,11 @@ class Request:
         :param output_file: a string, the name of the output file
                             that contains data of the request.
         """
+        if ".txt" not in input_file:
+            raise Exception("File extension must be .txt")
         self.mode = mode
         self.expanded = expanded if expanded is not None else False
         self.input_data = [input_data]
-        print(type(self.input_data))
         self.input_file = input_file
         if input_file:
             self.process_file_to_data()
@@ -52,8 +54,11 @@ class Request:
         self.api = PokedexAPI()
 
     def process_file_to_data(self):
-        with open(file=self.input_file, mode='r', encoding='UTF-8') as file:
-            self.input_data = [line.rstrip('\n').lower() for line in file]
+        try:
+            with open(file=self.input_file, mode='r', encoding='UTF-8') as file:
+                self.input_data = [line.rstrip('\n').lower() for line in file]
+        except OSError as e:
+            raise FileNotFoundError(e)
 
     def process_request(self) -> list:
         loop = asyncio.new_event_loop()
@@ -131,12 +136,16 @@ def setup_cmd_line_interface():
 
 
 def main():
-    args = setup_cmd_line_interface()
-    request = Request(args.mode, args.expanded, args.inputdata, args.inputfile,
+    try:
+        args = setup_cmd_line_interface()
+        request = Request(args.mode, args.expanded, args.inputdata, args.inputfile,
                       args.output)
-    print(request)
-    pokedex = Pokedex(request)
-    pokedex.generate_report()
+        pokedex = Pokedex(request)
+        pokedex.generate_report()
+    except Exception as e:
+        print("Error: " + str(e))
+    except FileNotFoundError as fe:
+        print(str(fe))
 
 
 if __name__ == "__main__":
